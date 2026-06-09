@@ -2,27 +2,484 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>Boku Beats</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Boku Beats — Watch. Remember. Move. Score.</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="description" content="Boku Beats is a rhythm-memory game for children ages 4–10. Watch the beat, remember the moves, and play with your whole body — no tapping required." />
+<meta name="theme-color" content="#FFF9F3" />
+<meta property="og:title" content="Boku Beats" />
+<meta property="og:description" content="A hands-off rhythm-memory game for kids. Clap, snap, stomp — the phone listens and scores you." />
+<meta property="og:image" content="./media/01-home.png" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://micahwalkerdesign.github.io/bokubeats-site/" />
+<link rel="icon" href="./media/01-home.png" />
 <style>
-  body { background:#FFF9F3; color:#4A3426; font-family:-apple-system,system-ui,sans-serif; margin:0; min-height:100vh; display:grid; place-items:center; padding:24px; }
-  main { max-width:480px; background:#FFF5E8; border-radius:24px; padding:32px; text-align:center; }
-  h1 { margin:0 0 8px 0; font-size:36px; letter-spacing:1px; }
-  .accent { color:#F28C52; }
-  p { color:#6B4F3B; line-height:1.5; }
-  ul { list-style:none; padding:0; display:grid; gap:8px; }
-  a { display:block; padding:14px 20px; background:#F28C52; color:#FFF5E8; border-radius:9999px; text-decoration:none; font-weight:700; }
-  a.ghost { background:transparent; color:#6B4F3B; border:2px solid #6B4F3B; }
+  :root {
+    --bg: #FFF9F3;
+    --cream: #FFF5E8;
+    --ink: #4A3426;
+    --ink-soft: #6B4F3B;
+    --orange: #F28C52;
+    --peach: #F8C291;
+    --rose: #E78787;
+    --green: #6FBF73;
+    --sky: #6EA6C9;
+    --line: rgba(74,52,38,0.10);
+    --radius-lg: 28px;
+    --radius-md: 18px;
+    --radius-pill: 9999px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  a { color: var(--orange); }
+  a:hover { color: var(--rose); }
+
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* Nav */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(255,249,243,0.85);
+    backdrop-filter: saturate(180%) blur(14px);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap { display:flex; align-items:center; justify-content:space-between; padding:14px 24px; }
+  .brand {
+    font-weight: 800; letter-spacing: 1px; font-size: 18px;
+  }
+  .brand .dot {
+    display:inline-block; width:14px; height:14px; border-radius:50%;
+    background: var(--orange); margin-right:8px; vertical-align:-2px;
+    box-shadow: 0 0 0 3px var(--cream);
+  }
+  nav ul { list-style:none; margin:0; padding:0; display:flex; gap:22px; }
+  nav a { color: var(--ink-soft); text-decoration:none; font-weight:600; font-size:14px; }
+  nav a:hover { color: var(--ink); }
+
+  /* Hero */
+  header.hero { padding: 72px 0 48px; }
+  header.hero .wrap {
+    display: grid; gap: 56px;
+    grid-template-columns: 1.05fr 0.95fr;
+    align-items: center;
+  }
+  .eyebrow {
+    display:inline-block; padding:6px 14px; border-radius: var(--radius-pill);
+    background: var(--peach); color: var(--ink); font-weight:700; font-size:13px;
+    letter-spacing: .3px;
+  }
+  h1 {
+    margin: 16px 0 12px;
+    font-size: clamp(40px, 6.5vw, 64px);
+    line-height: 1.04; letter-spacing: 1px;
+    font-weight: 900;
+  }
+  h1 .accent { color: var(--orange); }
+  .lede {
+    font-size: clamp(17px, 1.6vw, 19px);
+    color: var(--ink-soft); margin: 0 0 24px;
+    max-width: 52ch;
+  }
+  .cta-row { display:flex; gap:12px; flex-wrap:wrap; }
+  .btn {
+    display:inline-flex; align-items:center; gap:8px;
+    padding: 14px 22px; border-radius: var(--radius-pill);
+    text-decoration:none; font-weight:800; font-size:15px; letter-spacing:.3px;
+    transition: transform .15s ease, box-shadow .15s ease;
+    box-shadow: 0 6px 0 rgba(74,52,38,0.12);
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn:active { transform: translateY(2px); box-shadow: 0 3px 0 rgba(74,52,38,0.12); }
+  .btn-primary { background: var(--orange); color: var(--cream); }
+  .btn-ghost { background: var(--cream); color: var(--ink); border: 2px solid var(--line); box-shadow:none; }
+  .hero-art {
+    position: relative; display:flex; justify-content:center;
+  }
+  .hero-phone {
+    width: 320px; max-width: 90%;
+    border-radius: 42px;
+    box-shadow: 0 30px 60px rgba(74,52,38,0.18), 0 8px 24px rgba(74,52,38,0.08);
+    transform: rotate(-3deg);
+  }
+  .hero-blob {
+    position:absolute; inset:auto auto -10% -8%;
+    width: 220px; height: 220px; border-radius:50%;
+    background: radial-gradient(circle at 30% 30%, var(--peach), transparent 70%);
+    filter: blur(8px); z-index:-1;
+  }
+
+  /* Quick chips */
+  .chips { display:flex; flex-wrap:wrap; gap:10px; margin-top: 18px; }
+  .chip {
+    padding: 8px 14px; border-radius: var(--radius-pill);
+    background: var(--cream); border:1px solid var(--line);
+    font-size:13px; font-weight:600; color: var(--ink-soft);
+  }
+  .chip strong { color: var(--ink); }
+
+  /* Sections */
+  section { padding: 64px 0; }
+  section h2 {
+    font-size: clamp(28px, 3.6vw, 38px); margin:0 0 8px; letter-spacing:.5px;
+    font-weight: 900;
+  }
+  section .sub {
+    color: var(--ink-soft); max-width: 60ch; margin: 0 0 36px;
+    font-size: 16px;
+  }
+
+  /* Features grid */
+  .features {
+    display: grid; gap: 18px;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .feature {
+    background: var(--cream);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+  }
+  .feature .icon {
+    width: 44px; height: 44px; border-radius: var(--radius-pill);
+    display:grid; place-items:center; font-size: 22px;
+    margin-bottom: 14px;
+  }
+  .feature h3 { margin: 0 0 8px; font-size: 19px; }
+  .feature p { margin: 0; color: var(--ink-soft); font-size: 15px; }
+  .ic-mic { background: var(--green); color:#FFF; }
+  .ic-eye { background: var(--sky); color:#FFF; }
+  .ic-star { background: var(--orange); color:#FFF; }
+  .ic-lock { background: var(--rose); color:#FFF; }
+  .ic-bolt { background: #C586D9; color:#FFF; }
+  .ic-heart { background: var(--peach); color: var(--ink); }
+
+  /* How-it-works */
+  .steps {
+    display:grid; gap: 24px;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .step {
+    background: var(--cream);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 22px 22px 24px;
+    position: relative;
+  }
+  .step .num {
+    position:absolute; top:-14px; left:22px;
+    width: 32px; height: 32px; border-radius: var(--radius-pill);
+    background: var(--orange); color: var(--cream); display:grid; place-items:center;
+    font-weight: 900; font-size: 14px;
+    box-shadow: 0 4px 0 rgba(74,52,38,0.12);
+  }
+  .step h3 { margin: 14px 0 6px; font-size: 17px; }
+  .step p { margin: 0; color: var(--ink-soft); font-size: 14.5px; }
+
+  /* Gallery */
+  .gallery {
+    display: grid; gap: 16px;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .gallery figure {
+    margin: 0; background: var(--cream);
+    border-radius: var(--radius-lg); border:1px solid var(--line);
+    padding: 14px; display:flex; flex-direction:column; align-items:center; gap:10px;
+  }
+  .gallery img {
+    width: 100%; height: auto; aspect-ratio: 1290/2796;
+    object-fit: cover; border-radius: 22px;
+    box-shadow: 0 14px 30px rgba(74,52,38,0.12);
+  }
+  .gallery figcaption {
+    font-size: 13px; color: var(--ink-soft); font-weight:600;
+  }
+
+  /* Pricing */
+  .pricing {
+    display:grid; gap: 20px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .price {
+    background: var(--cream);
+    border: 2px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+  }
+  .price.feature-card {
+    border-color: var(--orange);
+    background: linear-gradient(180deg, #FFF5E8 0%, #FFE9D2 100%);
+  }
+  .price h3 { margin:0 0 4px; font-size: 22px; }
+  .price .amount { font-size: 42px; font-weight: 900; margin: 4px 0 6px; }
+  .price ul { list-style: none; padding: 0; margin: 14px 0 0; display:grid; gap:10px; }
+  .price li { color: var(--ink-soft); font-size: 15px; }
+  .price li:before { content:"✓ "; color: var(--green); font-weight:900; }
+
+  /* FAQ */
+  .faq { display:grid; gap:12px; }
+  details {
+    background: var(--cream); border: 1px solid var(--line);
+    border-radius: var(--radius-md); padding: 16px 20px;
+  }
+  details + details { margin-top: 0; }
+  summary {
+    cursor:pointer; font-weight: 700; list-style: none;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  summary::-webkit-details-marker { display:none; }
+  summary::after {
+    content: "+"; font-size: 22px; color: var(--orange); font-weight:900;
+    transition: transform .15s ease;
+  }
+  details[open] summary::after { content: "−"; }
+  details p { color: var(--ink-soft); margin: 10px 0 0; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--line);
+    background: var(--cream);
+    padding: 36px 0; color: var(--ink-soft); font-size: 14px;
+  }
+  footer .wrap { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  footer a { color: var(--ink-soft); text-decoration: none; margin-left: 18px; }
+  footer a:hover { color: var(--ink); }
+
+  /* Mobile */
+  @media (max-width: 880px) {
+    header.hero { padding: 56px 0 32px; }
+    header.hero .wrap { grid-template-columns: 1fr; }
+    .features { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .gallery { grid-template-columns: 1fr 1fr; }
+    .pricing { grid-template-columns: 1fr; }
+    nav ul { gap: 14px; }
+    nav a { font-size: 13px; }
+  }
+  @media (max-width: 520px) {
+    .steps, .gallery { grid-template-columns: 1fr; }
+    .hero-phone { width: 260px; }
+  }
 </style>
 </head>
 <body>
-<main>
-  <h1>BOKU <span class="accent">BEATS</span></h1>
-  <p>A rhythm-memory game for children, designed by parents.</p>
-  <ul>
-    <li><a href="./privacy.html">Privacy Policy</a></li>
-    <li><a class="ghost" href="./terms.html">Terms of Use</a></li>
-  </ul>
-</main>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span>Boku Beats</div>
+    <ul>
+      <li><a href="#features">Features</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#screens">Screens</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">For kids 4–10 · Ages with grown-ups</span>
+      <h1>BOKU <span class="accent">BEATS</span></h1>
+      <p class="lede">
+        A hands-off rhythm-memory game for kids. Watch a beat, remember the moves,
+        then clap, snap, and stomp along — the phone listens and scores you.
+        No tapping. No grabbing. Just bodies and rhythm.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#download">Get it on the App Store</a>
+        <a class="btn btn-ghost" href="#how">See how it works</a>
+      </div>
+      <div class="chips">
+        <span class="chip"><strong>4+</strong> Age rated</span>
+        <span class="chip">No accounts</span>
+        <span class="chip">No data collected</span>
+        <span class="chip">Plays in any language</span>
+      </div>
+    </div>
+    <div class="hero-art">
+      <span class="hero-blob"></span>
+      <img class="hero-phone" src="./media/01-home.png" alt="Boku Beats home screen on iPhone" />
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="wrap">
+    <h2>Designed for little movers.</h2>
+    <p class="sub">Boku Beats was built around how children actually want to play with rhythm — with their whole bodies. Every feature pushes them off the screen and into the music.</p>
+    <div class="features">
+      <div class="feature">
+        <div class="icon ic-mic">🎤</div>
+        <h3>Listens, doesn't tap</h3>
+        <p>The phone hears claps, snaps, stomps, and slaps in real time. No buttons to mash, no fingerprints on the screen.</p>
+      </div>
+      <div class="feature">
+        <div class="icon ic-eye">👀</div>
+        <h3>Watch · Remember · Move</h3>
+        <p>A simple loop kids understand the first time: watch a beat play, then copy it back. Memory and rhythm in one.</p>
+      </div>
+      <div class="feature">
+        <div class="icon ic-star">⭐</div>
+        <h3>Stars and combos</h3>
+        <p>Big animated rewards for every hit. Misses are gentle. Encouragement is louder than failure.</p>
+      </div>
+      <div class="feature">
+        <div class="icon ic-bolt">⚡</div>
+        <h3>Three difficulties</h3>
+        <p>Easy uses picture cues. Medium starts adding symbols. Hard is pure memory. Pick the right challenge per child.</p>
+      </div>
+      <div class="feature">
+        <div class="icon ic-heart">🫶</div>
+        <h3>Kind by default</h3>
+        <p>Mic-off mode plays the full game with no scoring pressure. Reduced-motion and large text are toggle-ready.</p>
+      </div>
+      <div class="feature">
+        <div class="icon ic-lock">🔒</div>
+        <h3>Privacy-first</h3>
+        <p>No accounts, no sign-in, no analytics on by default, no audio recorded. Saves only live on the device.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <h2>How a round works.</h2>
+    <p class="sub">Each round takes about a minute. Long enough to play, short enough to play again.</p>
+    <div class="steps">
+      <div class="step">
+        <span class="num">1</span>
+        <h3>Pick a challenge</h3>
+        <p>Easy, Medium, or Hard. Toggle the microphone on if you want it to listen — off if you just want to watch.</p>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <h3>Learn the moves</h3>
+        <p>A short legend shows the moves for today's round — claps, stomps, fruit symbols, whatever the difficulty uses.</p>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <h3>Watch the beat</h3>
+        <p>Boku plays a short rhythm. Each note moves across a line. Watch carefully — that's the sequence to copy.</p>
+      </div>
+      <div class="step">
+        <span class="num">4</span>
+        <h3>Play it back</h3>
+        <p>The line replays empty. Clap, snap, or stomp on each note. The phone listens, scores hits and combos, awards stars.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="screens">
+  <div class="wrap">
+    <h2>What it looks like.</h2>
+    <p class="sub">Real screenshots — same artwork your kids will see.</p>
+    <div class="gallery">
+      <figure><img src="./media/02-difficulty.png" alt="Choosing a difficulty" /><figcaption>Pick a challenge</figcaption></figure>
+      <figure><img src="./media/03-legend-easy.png" alt="The legend screen showing today's moves" /><figcaption>Today's moves</figcaption></figure>
+      <figure><img src="./media/05-game-easy.png" alt="Gameplay on Easy difficulty" /><figcaption>Round in progress</figcaption></figure>
+      <figure><img src="./media/07-results.png" alt="Round results with stars and coins" /><figcaption>Stars and combos</figcaption></figure>
+      <figure><img src="./media/08-collection.png" alt="Collection of unlockable Boku looks" /><figcaption>Collection</figcaption></figure>
+      <figure><img src="./media/10-custom.png" alt="Custom round builder" /><figcaption>Custom rounds</figcaption></figure>
+      <figure><img src="./media/09-premium.png" alt="Boku Beats Premium upgrade" /><figcaption>One-time Premium</figcaption></figure>
+      <figure><img src="./media/01-home.png" alt="Home screen" /><figcaption>Home</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="wrap">
+    <h2>Honest, one-time pricing.</h2>
+    <p class="sub">No subscriptions. No tricks. Free to download, with one optional upgrade that lasts forever.</p>
+    <div class="pricing">
+      <div class="price">
+        <h3>Free</h3>
+        <div class="amount">€0</div>
+        <p>Everything kids need to play.</p>
+        <ul>
+          <li>All three difficulties</li>
+          <li>Daily rewards and streaks</li>
+          <li>Collection of unlockable Boku looks</li>
+          <li>Microphone scoring when you want it</li>
+        </ul>
+      </div>
+      <div class="price feature-card">
+        <h3>Premium · one-time</h3>
+        <div class="amount">€4.99</div>
+        <p>Pay once. Yours forever, on every device signed in to your Apple ID.</p>
+        <ul>
+          <li>No ads, anywhere</li>
+          <li>Custom rounds: pick duration, symbols, packs</li>
+          <li>All premium symbol packs included</li>
+          <li>Family Sharing supported</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <h2>Common questions.</h2>
+    <p class="sub">Quick answers for grown-ups before they hand the phone over.</p>
+    <div class="faq">
+      <details>
+        <summary>Does it actually record my child's voice?</summary>
+        <p>No. The microphone runs only during a round, only listens for short percussive sounds (claps, snaps, stomps), and never saves or uploads any audio. You can also turn the mic off and play in watch-only mode.</p>
+      </details>
+      <details>
+        <summary>How old does a child need to be?</summary>
+        <p>Boku Beats is rated 4+. Kids 4–6 do best on Easy with a grown-up nearby. Kids 7+ can usually drive Medium and Hard on their own.</p>
+      </details>
+      <details>
+        <summary>Are there ads in the free version?</summary>
+        <p>There's an occasional short ad between rounds in Free. Premium removes all ads. There are no ads aimed at children and no third-party trackers.</p>
+      </details>
+      <details>
+        <summary>Will it work without an internet connection?</summary>
+        <p>Yes. Once installed, the entire game plays offline. The only thing that needs a connection is restoring a Premium purchase on a new device.</p>
+      </details>
+      <details>
+        <summary>How is my data handled?</summary>
+        <p>Boku Beats doesn't collect personal data. No accounts, no sign-in, no analytics on by default. See the <a href="./privacy.html">Privacy Policy</a> for the full plain-English version.</p>
+      </details>
+      <details>
+        <summary>I have a problem with the app — what do I do?</summary>
+        <p>Email <a href="mailto:support@bokubeats.app">support@bokubeats.app</a> with a quick description and a screenshot if you can. A human will reply.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section id="download">
+  <div class="wrap" style="text-align:center;">
+    <h2 style="margin-bottom: 16px;">Ready to play?</h2>
+    <p class="sub" style="margin-left:auto; margin-right:auto;">Boku Beats is launching on the App Store. iPhone and iPad. Free to play, €4.99 one-time to go Premium.</p>
+    <a class="btn btn-primary" href="#" id="appstore-link">Coming soon to the App Store</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>© <span id="year">2026</span> Micah Walker · Boku Beats</div>
+    <div>
+      <a href="./privacy.html">Privacy</a>
+      <a href="./terms.html">Terms</a>
+      <a href="mailto:support@bokubeats.app">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
 </body>
 </html>
